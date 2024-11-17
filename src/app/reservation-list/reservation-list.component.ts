@@ -1,6 +1,7 @@
 import { Component,OnInit } from '@angular/core';
 import { Reservation } from '../models/reservation';
 import { ReservationService } from '../reservation/reservation.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-reservation-list',
@@ -15,11 +16,15 @@ export class ReservationListComponent implements OnInit{
   constructor(private reservationService: ReservationService){}
 
   ngOnInit(): void {
-      this.reservations = this.reservationService.getReservations();
+      this.reservationService.getReservations().subscribe(reservations=>{
+        this.reservations = reservations;
+      });
   }
-  deleteReservation(id: string):void
+  deleteReservation(id: string)
   {
-     this.reservationService.deleteReservation(id);
+     this.reservationService.deleteReservation(id).subscribe(()=>{
+      console.log("Delete processed");
+     });
   }
 
 }
